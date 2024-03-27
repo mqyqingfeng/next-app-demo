@@ -1,4 +1,4 @@
-import "../globals.css";
+import "../../globals.css";
 
 const navigation = [{ title: "Features", path: "#" }, { title: "Integrations", path: "#" }, { title: "Customers", path: "#" }, { title: "Pricing", path: "#" }];
 
