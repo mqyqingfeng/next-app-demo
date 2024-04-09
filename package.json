@@ -1,0 +1,21 @@
+{
+  "name": "react-rsc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsx watch ./index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsx": "^4.7.2"
+  },
+  "dependencies": {
+    "escape-html": "^1.0.3",
+    "express": "^4.19.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
