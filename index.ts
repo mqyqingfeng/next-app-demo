@@ -3,7 +3,8 @@ import { htmlGenerator } from "./generator";
 const app = express();
 
 app.get("/:route(*)", async (req, res) => {
-  const html = await htmlGenerator();
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const html = await htmlGenerator(url);
   res.setHeader("Content-Type", "text/html");
   res.end(html);
 });
