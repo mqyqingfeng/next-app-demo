@@ -4,9 +4,26 @@ import { renderJSXToHTML, renderJSXToClientJSX, stringifyJSX } from './utils'
 import { Layout, IndexPage, PostPage } from './components'
 
 export async function htmlGenerator(url) {
-  let html = await renderJSXToHTML(<Router url={url} />);
-  // 直接拼虽然有些错误，但浏览器会纠正，并正确解析
-  html += `<script type="module" src="/client.js"></script>`;
+  let jsx = <Router url={url} />
+  let html = await renderJSXToHTML(jsx);
+  // 获取当前页面的客户端 JSX 对象
+  const clientJSX = await renderJSXToClientJSX(jsx);
+  // 拼接到脚本代码中
+  const clientJSXString = JSON.stringify(clientJSX, stringifyJSX);
+  html += `<script>window.__INITIAL_CLIENT_JSX_STRING__ = `;
+  html += JSON.stringify(clientJSXString).replace(/</g, "\\u003c");
+  html += `</script>`;
+  html += `
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?dev"
+      }
+    }
+  </script>
+  <script type="module" src="/client.js"></script>
+`;
   return html;
 }
 

@@ -9,7 +9,19 @@ export async function renderJSXToHTML(jsx) {
     const childHtmls = await Promise.all(
       jsx.map((child) => renderJSXToHTML(child))
     );
-    return childHtmls.join("");
+    let html = "";
+    let wasTextNode = false;
+    let isTextNode = false;
+    for (let i = 0; i < jsx.length; i++) {
+      isTextNode = typeof jsx[i] === "string" || typeof jsx[i] === "number";
+      if (wasTextNode && isTextNode) {
+        html += "<!-- -->";
+      }
+      html += childHtmls[i];
+      wasTextNode = isTextNode;
+    }
+    return html;
+    // return childHtmls.join("");
   } else if (typeof jsx === "object") {
     if (jsx.$$typeof === Symbol.for("react.element")) {
       // 普通 HTML 标签
