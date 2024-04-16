@@ -5,9 +5,8 @@ const app = express();
 
 app.get("/:route(*)", async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  const clientJSXString = await jsxGenerator(url);
-  res.setHeader("Content-Type", "application/json");
-  res.end(clientJSXString);
+  const { pipe } = jsxGenerator(url);
+  pipe(res)
 });
 
 app.listen(3001, (err) => {

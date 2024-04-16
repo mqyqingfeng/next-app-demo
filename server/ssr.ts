@@ -1,7 +1,8 @@
 import express from "express";
 import { readFile } from "fs/promises";
-import { renderToString } from "react-dom/server";
-import { parseJSX } from "../utils";
+import fetch from 'node-fetch';
+import { renderToPipeableStream } from "react-dom/server"
+import { createFromNodeStream } from "react-server-dom-webpack/client"
 
 const app = express();
 
@@ -16,7 +17,6 @@ app.get("/:route(*)", async (req, res) => {
     return;
   }
 
-  // 获取客户端 JSX 对象
   const response = await fetch("http://127.0.0.1:3001" + url.pathname);
 
   if (!response.ok) {
@@ -24,36 +24,24 @@ app.get("/:route(*)", async (req, res) => {
     res.end();
     return;
   }
-
-  const clientJSXString = await response.text();
+  const stream = response.body;
 
   // 获取客户端 JSX 对象
   if (url.searchParams.has("jsx")) {
-    res.setHeader("Content-Type", "application/json");
-    res.end(clientJSXString);
+    res.set("Content-type", "text/x-component")
+    stream.on("data", (data) => {
+      res.write(data)
+    })
+    stream.on("end", (data) => {
+      res.end()
+    })
   }
   // 获取 HTML
   else {
-    const clientJSX = JSON.parse(clientJSXString, parseJSX);
-    let html = renderToString(clientJSX);
-
-    html += `<script>window.__INITIAL_CLIENT_JSX_STRING__ = `;
-    html += JSON.stringify(clientJSXString).replace(/</g, "\\u003c");
-    html += `</script>`;
-    html += `
-      <script type="importmap">
-        {
-          "imports": {
-            "react": "https://esm.sh/react@18.2.0",
-            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?dev"
-          }
-        }
-      </script>
-      <script type="module" src="/client.js"></script>
-    `;
-
-    res.setHeader("Content-Type", "text/html");
-    res.end(html);
+    const root = await createFromNodeStream(stream, {})
+    res.set("Content-type", "text/html")
+    const { pipe } = renderToPipeableStream(root)
+    pipe(res)
   }
 });
 

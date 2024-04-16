@@ -1,5 +1,15 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { readFile, readdir } from "fs/promises";
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+const importMap = `{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.0-canary-c3048aab4-20240326?dev",
+        "react-dom/client": "https://esm.sh/react-dom@18.3.0-canary-c3048aab4-20240326/client?dev",
+        "react-server-dom-webpack": "https://esm.sh/react-server-dom-webpack@18.3.0-canary-c3048aab4-20240326/client?dev"
+  }
+}`
 
 export function Layout({ children }) {
   const author = "YaYu";
@@ -8,6 +18,15 @@ export function Layout({ children }) {
     <head>
       <title>My blog</title>
       <script src="https://cdn.tailwindcss.com"></script>
+      <script dangerouslySetInnerHTML={{ __html: `window.__webpack_require__ = async (id) => {
+          return import(id)
+        }` }}>
+      </script>
+      <script
+          type="importmap"
+          dangerouslySetInnerHTML={{ __html: importMap }}
+      ></script>
+      <script type="module" src="/client.js"></script>
     </head>
     <body className="p-5">
       <nav className="flex items-center justify-center gap-10 text-blue-600">
@@ -31,18 +50,27 @@ export async function IndexPage() {
     <section>
       <h1>Blog List:</h1>
       <div>
-        {slugs.map((slug, index) => <Post key={index} slug={slug} />)}
+        {slugs.map((slug, index) => (
+          <Suspense key={index} fallback={<p>Loading Post...</p>}>
+            <Post slug={slug} />
+          </Suspense>
+        ))}
       </div>
     </section>
   );
 }
 
 export function PostPage({ slug }) {
-  return <Post slug={slug} />;
+  return (
+    <Suspense fallback={<p>Loading Post...</p>}>
+      <Post slug={slug} />
+    </Suspense>
+  );
 }
 
 async function Post({ slug }) {
   let content = await readFile("./posts/" + slug + ".txt", "utf8");
+  await sleep(2000)
   return (
     <section>
       <a className="text-blue-600" href={"/" + slug}>{slug}</a>

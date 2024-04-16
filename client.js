@@ -1,46 +1,39 @@
+import * as React from "react"
+import { use, useState, startTransition } from "react"
+import { createFromFetch } from "react-server-dom-webpack"
 import { hydrateRoot } from 'react-dom/client';
-
-let currentPathname = window.location.pathname;
-const root = hydrateRoot(document, getInitialClientJSX());
 
 // 客户端路由缓存
 let clientJSXCache = {}
-clientJSXCache[currentPathname] = getInitialClientJSX()
+let currentPathname = window.location.pathname
+let updateRoot
 
-function getInitialClientJSX() {
-  const clientJSX = JSON.parse(window.__INITIAL_CLIENT_JSX_STRING__, parseJSX);
-  return clientJSX;
+function Shell({ data }) {
+  console.log("Shell", data)
+  const [root, setRoot] = useState(use(data))
+  clientJSXCache[currentPathname] = root
+  updateRoot = setRoot
+  return root
 }
+
+let data = createFromFetch(
+  fetch(currentPathname + '?jsx')
+)
+
+hydrateRoot(document, React.createElement(Shell, { data }))
 
 async function navigate(pathname) {
   currentPathname = pathname;
-
   if (clientJSXCache[pathname]) {
-    root.render(clientJSXCache[pathname])
+    updateRoot(clientJSXCache[pathname])
     return
   } else {
-    const clientJSX = await fetchClientJSX(pathname);
-    clientJSXCache[pathname] = clientJSX
-    if (pathname === currentPathname) {
-      root.render(clientJSX);
-    }
-  }
-}
-
-async function fetchClientJSX(pathname) {
-  const response = await fetch(pathname + "?jsx");
-  const clientJSXString = await response.text();
-  const clientJSX = JSON.parse(clientJSXString, parseJSX);
-  return clientJSX;
-}
-
-function parseJSX(key, value) {
-  if (value === "$RE") {
-    return Symbol.for("react.element");
-  } else if (typeof value === "string" && value.startsWith("$$")) {
-    return value.slice(1);
-  } else {
-    return value;
+    const response = fetch(pathname + '?jsx')
+    const root = await createFromFetch(response)
+    clientJSXCache[pathname] = root
+    startTransition(() => {
+      updateRoot(root)
+    })
   }
 }
 
