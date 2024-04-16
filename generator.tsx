@@ -1,13 +1,13 @@
-import { readFile, readdir } from "fs/promises";
 import React from 'react';
-import { renderJSXToHTML, renderJSXToClientJSX, stringifyJSX } from './utils'
+import { renderJSXToClientJSX, stringifyJSX } from './utils'
 import { Layout, IndexPage, PostPage } from './components'
+import { renderToString } from 'react-dom/server';
 
 export async function htmlGenerator(url) {
   let jsx = <Router url={url} />
-  let html = await renderJSXToHTML(jsx);
-  // 获取当前页面的客户端 JSX 对象
   const clientJSX = await renderJSXToClientJSX(jsx);
+  let html = await renderToString(clientJSX);
+
   // 拼接到脚本代码中
   const clientJSXString = JSON.stringify(clientJSX, stringifyJSX);
   html += `<script>window.__INITIAL_CLIENT_JSX_STRING__ = `;

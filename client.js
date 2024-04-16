@@ -3,6 +3,10 @@ import { hydrateRoot } from 'react-dom/client';
 let currentPathname = window.location.pathname;
 const root = hydrateRoot(document, getInitialClientJSX());
 
+// 客户端路由缓存
+let clientJSXCache = {}
+clientJSXCache[currentPathname] = getInitialClientJSX()
+
 function getInitialClientJSX() {
   const clientJSX = JSON.parse(window.__INITIAL_CLIENT_JSX_STRING__, parseJSX);
   return clientJSX;
@@ -10,9 +14,16 @@ function getInitialClientJSX() {
 
 async function navigate(pathname) {
   currentPathname = pathname;
-  const clientJSX = await fetchClientJSX(pathname);
-  if (pathname === currentPathname) {
-    root.render(clientJSX);
+
+  if (clientJSXCache[pathname]) {
+    root.render(clientJSXCache[pathname])
+    return
+  } else {
+    const clientJSX = await fetchClientJSX(pathname);
+    clientJSXCache[pathname] = clientJSX
+    if (pathname === currentPathname) {
+      root.render(clientJSX);
+    }
   }
 }
 

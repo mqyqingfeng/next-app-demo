@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsx watch ./index.ts"
+    "start": "concurrently \"npm run start:ssr\" \"npm run start:rsc\"",
+    "start:rsc": "tsx watch ./server/rsc.ts",
+    "start:ssr": "tsx watch ./server/ssr.ts"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "tsx": "^4.7.2"
   },
   "dependencies": {
+    "concurrently": "^8.2.2",
     "escape-html": "^1.0.3",
     "express": "^4.19.2",
     "react": "^18.2.0",
