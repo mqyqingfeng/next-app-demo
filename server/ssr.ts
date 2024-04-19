@@ -4,6 +4,7 @@ import { renderToString } from "react-dom/server";
 import { parseJSX } from "../utils";
 
 const app = express();
+app.use(express.static('public'))
 
 app.get("/:route(*)", async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -14,6 +15,10 @@ app.get("/:route(*)", async (req, res) => {
     res.setHeader("Content-Type", "text/javascript");
     res.end(content);
     return;
+  }
+
+  if (url.pathname === '/favicon.ico') {
+    return
   }
 
   // 获取客户端 JSX 对象
@@ -44,7 +49,7 @@ app.get("/:route(*)", async (req, res) => {
       <script type="importmap">
         {
           "imports": {
-            "react": "https://esm.sh/react@18.2.0",
+            "react": "https://esm.sh/react@18.2.0?dev",
             "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?dev"
           }
         }

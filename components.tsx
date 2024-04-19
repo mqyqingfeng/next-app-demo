@@ -1,5 +1,6 @@
 import React from 'react';
 import { readFile, readdir } from "fs/promises";
+import Like from "./Like";
 
 export function Layout({ children }) {
   const author = "YaYu";
@@ -47,6 +48,7 @@ async function Post({ slug }) {
     <section>
       <a className="text-blue-600" href={"/" + slug}>{slug}</a>
       <article className="h-40 mt-5 flex-1 rounded-xl bg-indigo-500 text-white flex items-center justify-center">{content}</article>
+      <Like />
     </section>
   )
 }

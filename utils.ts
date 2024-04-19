@@ -1,5 +1,9 @@
 import escapeHtml from 'escape-html'
 
+import React from 'react'
+import { readFile, writeFile } from "fs/promises"
+import path from "path"
+
 export async function renderJSXToHTML(jsx) {
   if (typeof jsx === "string" || typeof jsx === "number") {
     return escapeHtml(jsx);
@@ -72,8 +76,13 @@ export async function renderJSXToClientJSX(jsx) {
       } else if (typeof jsx.type === "function") {
         const Component = jsx.type;
         const props = jsx.props;
-        const returnedJsx = await Component(props);
-        return renderJSXToClientJSX(returnedJsx);
+        const isClientComponent = Component.toString().includes("use client")
+        if (isClientComponent) {
+          return await transformClientComponent(Component, props)
+        } else {
+          const returnedJsx = await Component(props)
+          return renderJSXToClientJSX(returnedJsx)
+        }
       } else throw new Error("Not implemented.");
     } else {
       return Object.fromEntries(
@@ -107,5 +116,47 @@ export function parseJSX(key, value) {
     return value.slice(1);
   } else {
     return value;
+  }
+}
+
+
+async function transformClientComponent(Component, props) {
+
+  const raw = Component.toString()
+  const children = await renderJSXToClientJSX(props.children)
+
+  const clientComponent = {
+    value: raw,
+    props: {
+      ...props,
+      "data-client": true,
+      "data-component": Component.name,
+      children,
+    },
+  }
+
+  await createClientComponentJS(clientComponent)
+
+  return React.createElement(
+    "div",
+    {
+      "data-client": true,
+      "data-component": Component.name
+    }
+  )
+}
+
+async function createClientComponentJS(Component) {
+  const { props, value } = Component
+  const name = props["data-component"]
+  const filenameRaw = path.join(process.cwd(), "public", "client", name + ".js")
+  const filename = path.normalize(filenameRaw)
+  const fileContents = `import React from "react"
+      export const props = ${JSON.stringify(props)}
+      export const jsx = ${value.replaceAll('import_react.default', 'React')}`
+  try {
+    await writeFile(filename, fileContents)
+  } catch (err) {
+    console.log("error in writeComponentToDisk", err)
   }
 }

@@ -1,4 +1,6 @@
-import { hydrateRoot } from 'react-dom/client';
+import React from "react"
+import { hydrateRoot, createRoot } from 'react-dom/client';
+
 
 let currentPathname = window.location.pathname;
 const root = hydrateRoot(document, getInitialClientJSX());
@@ -70,3 +72,18 @@ window.addEventListener("popstate", () => {
   // 处理浏览器前进后退事件
   navigate(window.location.pathname);
 });
+
+
+const clientComponents = document.querySelectorAll("[data-client=true]")
+
+for (const clientComponent of clientComponents) {
+  const componentName = clientComponent.getAttribute("data-component")
+  const ClientComponent = await import("./client/" + `${componentName}.js`)
+  const { jsx, props } = ClientComponent
+
+  const clientComponentJSX = React.createElement(jsx, props)
+  clientComponent.setAttribute("data-loading", false)
+
+  const clientComponentRoot = createRoot(clientComponent)
+  clientComponentRoot.render(clientComponentJSX)
+}
