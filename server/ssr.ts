@@ -3,8 +3,12 @@ import { readFile } from "fs/promises";
 import fetch from 'node-fetch';
 import { renderToPipeableStream } from "react-dom/server"
 import { createFromNodeStream } from "react-server-dom-webpack/client"
+import bodyParser from 'body-parser';
+import { serverAction }  from "../actions";
 
 const app = express();
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get("/:route(*)", async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -42,6 +46,13 @@ app.get("/:route(*)", async (req, res) => {
     res.set("Content-type", "text/html")
     const { pipe } = renderToPipeableStream(root)
     pipe(res)
+  }
+});
+
+app.post("/actions/:route(*)", async (req, res) => {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  if (url.pathname.startsWith("/actions/")) {
+    await serverAction(req, res)
   }
 });
 

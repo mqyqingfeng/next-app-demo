@@ -64,6 +64,8 @@ export function PostPage({ slug }) {
   return (
     <Suspense fallback={<p>Loading Post...</p>}>
       <Post slug={slug} />
+      <CommentForm slug={slug} />
+      <CommentList slug={slug} />
     </Suspense>
   );
 }
@@ -76,6 +78,52 @@ async function Post({ slug }) {
       <a className="text-blue-600" href={"/" + slug}>{slug}</a>
       <article className="h-40 mt-5 flex-1 rounded-xl bg-indigo-500 text-white flex items-center justify-center">{content}</article>
     </section>
+  )
+}
+
+async function CommentForm({ slug }) {
+  return (
+    <form id="form" method="POST" action="/actions/comment" className="my-6 flex max-w-md gap-x-4 mx-auto">
+      <input
+        name="comment"
+        required
+        className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+        placeholder="Enter your Comment"
+        />
+      <input type="hidden" name="slug" value={slug} />
+      <button
+        type="submit"
+        className="flex-none rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+        >
+        Submit
+      </button>
+    </form>
+  )
+}
+
+async function CommentList({ slug }) {
+  let comments
+  try {
+    const commentsData = await readFile("./comments/" + slug + ".json", "utf8")
+    comments = JSON.parse(commentsData)
+  } catch (err) {
+    comments = []
+  }
+
+  return (
+    <div>
+      <h2>Comments:</h2>
+      <div className='divide-y divide-gray-100'>
+        {comments.map((comment, i) => {
+      return (
+        <div key={i} className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <div className="text-sm font-medium leading-6 text-gray-900">Floor {i+1}</div>
+          <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{comment.content}</div>
+        </div>
+      )
+    })}
+      </div>
+    </div>
   )
 }
 
