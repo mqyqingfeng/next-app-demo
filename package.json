@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --config webpack.client.js && webpack --config webpack.server.js && node ./build/server.bundle.js"
+    "start": "webpack --config webpack.client.js && webpack --config webpack.server.js && node ./build/server.bundle.js",
+    "build": "webpack --config webpack.client.js && webpack --config webpack.build.js && node ./build/build.bundle.js"
   },
   "author": "",
   "license": "ISC",
