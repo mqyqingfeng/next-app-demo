@@ -9,14 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dayjs": "^1.11.11",
+    "next": "14.2.3",
+    "next-contentlayer": "^0.3.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.3"
+    "rehype-prism-plus": "^2.0.0",
+    "remark-gfm": "^3.0.1"
   },
   "devDependencies": {
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.13",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  },
+  "overrides": {
+    "next-contentlayer": {
+      "next": "$next"
+    }
   }
 }
