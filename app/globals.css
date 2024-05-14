@@ -16,7 +16,7 @@
   }
 } */
 
-body {
+/* body {
   padding: 20px;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -25,7 +25,20 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+} */
+
+/* html,
+body {
+  color: #000;
+  background: #fff;
 }
+
+.dark {
+  html, body {
+    color: #fff;
+    background: #000;
+  }
+} */
 
 @layer utilities {
   .text-balance {
