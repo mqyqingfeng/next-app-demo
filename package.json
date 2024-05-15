@@ -10,12 +10,18 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.0.3",
+    "accept-language": "^3.0.18",
     "dayjs": "^1.11.11",
+    "i18next": "^23.11.4",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-resources-to-backend": "^1.2.1",
     "next": "14.2.3",
     "next-contentlayer": "^0.3.4",
     "next-themes": "^0.3.0",
     "react": "^18",
+    "react-cookie": "^7.1.4",
     "react-dom": "^18",
+    "react-i18next": "^14.1.1",
     "rehype-prism-plus": "^2.0.0",
     "remark-gfm": "^3.0.1"
   },

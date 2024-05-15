@@ -40,6 +40,10 @@ body {
   }
 } */
 
+body {
+  padding: 20px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
