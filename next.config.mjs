@@ -1,2 +1,10 @@
 import { withContentlayer } from 'next-contentlayer'
-export default withContentlayer({})
+import bundleAnalyzer from '@next/bundle-analyzer'
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+export default withBundleAnalyzer(withContentlayer({
+  reactStrictMode: false,
+}))

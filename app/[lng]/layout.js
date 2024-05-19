@@ -3,6 +3,8 @@ import "./globals.css";
 import { ThemeProviders } from './theme-providers'
 import ThemeSwitch from '@/components/ThemeSwitch';
 import LangSwitch from '@/components/LangSwitch';
+import { WebVitals } from '@/components/WebVitals.js'
+
 import { dir } from 'i18next'
 
 // 添加静态路由
@@ -54,6 +56,7 @@ export default function RootLayout({ children, params: { lng } }) {
   return (
     <html lang={lng} dir={dir(lng)} suppressHydrationWarning>
       <body>
+        <WebVitals />
         <ThemeProviders>
           <header className="flex justify-end">
             <ThemeSwitch />

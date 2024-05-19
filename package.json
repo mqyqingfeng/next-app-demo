@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@headlessui/react": "^2.0.3",
+    "@next/bundle-analyzer": "^14.2.3",
     "accept-language": "^3.0.18",
     "dayjs": "^1.11.11",
     "i18next": "^23.11.4",
