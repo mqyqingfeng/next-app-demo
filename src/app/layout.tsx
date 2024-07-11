@@ -1,16 +1,13 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { zhCN } from "@clerk/localizations";
 import zhCNlocales from "@/locales/zh.json";
 import merge from "lodash.merge";
+// Step1: 添加组件
+import ThemeProvider from "@/components/ThemeProvider";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -24,9 +21,19 @@ export default function RootLayout({
   const localization = merge(zhCN, zhCNlocales);
   return (
     <ClerkProvider localization={localization}>
-      <html lang="zh-CN">
+      {/* Step2: 设置 suppressHydrationWarning */}
+      <html lang="zh-CN" suppressHydrationWarning>
         <body>
-          <main>{children}</main>
+          {/* Step3: 设置 ThemeProvider */}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <div className="flex w-full flex-col items-center">{children}</div>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
