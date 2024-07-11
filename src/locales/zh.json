@@ -1,0 +1,10 @@
+{
+  "userProfile": {
+    "start": {
+      "dangerSection": {
+        "deleteAccountButton": "删除账户",
+        "title": "账户终止"
+      }
+    }
+  }
+}
