@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "@/components/ui/use-toast";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,6 +39,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ListMap } from "@/lib/const";
 import { useState } from "react";
+import { createList } from "@/actions/list";
 
 export default function CreateListModal() {
   const form = useForm({
@@ -51,8 +53,21 @@ export default function CreateListModal() {
   const [open, setOpen] = useState(false);
 
   const onSubmit = async (data: createListZodSchemaType) => {
-    console.log(data);
-    setOpen(false);
+    try {
+      await createList(data);
+      onOpenChange(false);
+      toast({
+        title: "恭喜您",
+        description: "清单创建成功！",
+      });
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: "哎呦",
+        description: "清单创建失败",
+        variant: "destructive",
+      });
+    }
   };
 
   const onOpenChange = (open: boolean) => {
