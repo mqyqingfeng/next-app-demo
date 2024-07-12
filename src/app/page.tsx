@@ -9,6 +9,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { currentUser } from "@clerk/nextjs/server";
 import CreateListModal from "@/components/CreateListModal";
+import { CheckLists } from "@/components/CheckLists";
 
 async function Welcome() {
   const user = await currentUser();
@@ -41,6 +42,9 @@ export default function HomePage() {
     <main className="flex w-full flex-col items-center px-4">
       <Suspense fallback={<WelcomeFallback />}>
         <Welcome />
+      </Suspense>
+      <Suspense fallback={<WelcomeFallback />}>
+        <CheckLists />
       </Suspense>
     </main>
   );

@@ -39,3 +39,19 @@ export async function createList(data: createListZodSchemaType) {
     message: "清单创建成功",
   };
 }
+
+export async function deleteList(id: number) {
+  const user = await currentUser();
+  if (!user) {
+    throw new Error("用户未登录，请先登录");
+  }
+
+  await prisma.list.delete({
+    where: {
+      id: id,
+      userId: user.id,
+    },
+  });
+
+  revalidatePath("/");
+}
