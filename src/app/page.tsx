@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { currentUser } from "@clerk/nextjs/server";
-import CreateListModal from "@/components/createListModal";
+import CreateListModal from "@/components/CreateListModal";
 
 async function Welcome() {
   const user = await currentUser();

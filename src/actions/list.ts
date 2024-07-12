@@ -6,6 +6,7 @@ import {
 } from "@/schema/createList";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import prisma from "@/lib/prisma";
 
 export async function createList(data: createListZodSchemaType) {
   const user = await currentUser();
@@ -23,8 +24,13 @@ export async function createList(data: createListZodSchemaType) {
     };
   }
 
-  // Todo: 数据库处理
-  console.log(data);
+  await prisma.list.create({
+    data: {
+      userId: user.id,
+      color: data.color,
+      name: data.name,
+    },
+  });
 
   revalidatePath("/");
 
