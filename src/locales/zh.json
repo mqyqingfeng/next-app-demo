@@ -1,0 +1,71 @@
+{
+  "RootLayout": {
+    "home_link": "主页",
+    "about_link": "关于",
+    "guestbook_link": "留言板",
+    "portfolio_link": "作品集",
+    "sign_in_link": "登录",
+    "sign_up_link": "注册"
+  },
+  "BaseTemplate": {
+    "description": "使用 Tailwind CSS 的 Next.js Boilerplate 的起始代码",
+    "made_with": "制作"
+  },
+  "Index": {
+    "meta_title": "Next.js Boilerplate 展示",
+    "meta_description": "Next.js Boilerplate 是您项目的完美起始代码。使用 Next.js 框架构建您的 React 应用程序。"
+  },
+  "Guestbook": {
+    "meta_title": "留言板",
+    "meta_description": "增删改查操作示例",
+    "database_powered_by": "数据库支持",
+    "loading_guestbook": "加载留言板...",
+    "error_reporting_powered_by": "错误报告提供者"
+  },
+  "GuestbookForm": {
+    "username": "用户名",
+    "body": "正文",
+    "save": "保存"
+  },
+  "About": {
+    "meta_title": "关于",
+    "meta_description": "关于页面描述",
+    "about_paragraph": "欢迎来到我们的关于页面！我们是一群充满激情的个人，致力于创建令人惊叹的软件。",
+    "translation_powered_by": "翻译提供者"
+  },
+  "Portfolio": {
+    "meta_title": "作品集",
+    "meta_description": "欢迎来到我的作品集页面！",
+    "presentation": "欢迎来到我的作品集页面！在这里，您将找到我精心策划的一系列作品和成就。通过这个作品集，我致力于展示我的专业知识、创造力以及为您的项目带来的价值。",
+    "portfolio_name": "作品集 {name}",
+    "error_reporting_powered_by": "代码覆盖率提供者",
+    "coverage_powered_by": "作品集 {slug}"
+  },
+  "PortfolioSlug": {
+    "meta_title": "作品集 {slug} 描述",
+    "meta_description": "作品集 {slug}",
+    "header": "为企业活动制作一套促销材料和品牌元素。打造视觉统一的主题，包括标志、海报、横幅和数字资产。将客户的品牌形象与当代创新的方法相融合。受到活动参与者的好评，使活动成功举办，参与度提高，品牌可见度增加。",
+    "content": "日志管理提供者",
+    "log_management_powered_by": "登录"
+  },
+  "SignIn": {
+    "meta_title": "通过我们用户友好的登录流程无缝登录您的账户。",
+    "meta_description": "注册"
+  },
+  "SignUp": {
+    "meta_title": "通过我们直观的注册流程轻松创建账户。",
+    "meta_description": "仪表盘"
+  },
+  "Dashboard": {
+    "meta_title": "您好，{email}！",
+    "hello_message": "用户个人资料"
+  },
+  "UserProfile": {
+    "meta_title": "仪表盘"
+  },
+  "DashboardLayout": {
+    "dashboard_link": "管理您的账户",
+    "user_profile_link": "退出登录",
+    "sign_out": "退出登录"
+  }
+}
